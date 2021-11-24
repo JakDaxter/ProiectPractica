@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -7,7 +8,8 @@ namespace ProiectPractica5.Models
 {
     public class Annoncements
     {
-        public int IdAnnoncements { get; set; }
+        [Key]
+        public Guid IdAnnoncements { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
         public string Title { get; set; }

@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ProiectPractica5.App_Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +27,10 @@ namespace ProiectPractica5
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ClubMembershipDbContext>(options =>
+options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+       
+            services.AddSwaggerGen();
             services.AddControllers();
         }
 
@@ -45,6 +51,12 @@ namespace ProiectPractica5
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/Swagger/v1/swagger.json", "API Practica");
             });
         }
     }
