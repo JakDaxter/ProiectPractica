@@ -14,7 +14,7 @@ namespace ProiectPractica5.Models
         public string ContentCode { get; set; }
         public Guid IdMember { get; set; }
         public int Revision { get; set; }
-        public bool isPublished { get; set; }
+        public bool IsPublished { get; set; }
         public DateTime DatetimeAdded { get; set; }
     }
 }
