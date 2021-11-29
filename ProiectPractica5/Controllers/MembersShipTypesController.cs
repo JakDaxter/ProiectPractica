@@ -1,22 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProiectPractica5.App_Data;
 
 namespace ProiectPractica5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MembersShipsTypeController : ControllerBase
+    public class MembersShipTypesController : ControllerBase
     {
+        private readonly ClubMembershipDbContext _context;
         private readonly ILogger<WeatherForecastController> _logger;
-        public MembersShipsTypeController(ILogger<WeatherForecastController> logger)
+        public MembersShipTypesController(ILogger<WeatherForecastController> logger, ClubMembershipDbContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(200);
+            return StatusCode(200, _context.MemberShipTypes);
         }
 
         [HttpPost]

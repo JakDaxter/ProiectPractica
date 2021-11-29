@@ -15,15 +15,16 @@ namespace ProiectPractica5.Controllers
     {
         private readonly ClubMembershipDbContext _context;
         private readonly ILogger<WeatherForecastController> _logger;
-        public AnnouncementsController(ILogger<WeatherForecastController> logger)
+        public AnnouncementsController(ILogger<WeatherForecastController> logger, ClubMembershipDbContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(200);
+            return StatusCode(200, _context.Announcements);
         }
 
         [HttpPost]

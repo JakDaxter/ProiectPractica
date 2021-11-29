@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ProiectPractica5.Models
 {
-    public class Annoncements
+    public class Announcements
     {
         [Key]
-        public Guid IdAnnoncements { get; set; }
+        public Guid IdAnnouncement { get; set; }
         public DateTime ValidFrom { get; set; }
         public DateTime ValidTo { get; set; }
         public string Title { get; set; }

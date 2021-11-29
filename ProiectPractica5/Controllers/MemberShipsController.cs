@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ProiectPractica5.App_Data;
 
 namespace ProiectPractica5.Controllers
 {
@@ -7,16 +8,18 @@ namespace ProiectPractica5.Controllers
     [ApiController]
     public class MemberShipsController : ControllerBase
     {
+        private readonly ClubMembershipDbContext _context;
         private readonly ILogger<WeatherForecastController> _logger;
-        public MemberShipsController(ILogger<WeatherForecastController> logger)
+        public MemberShipsController(ILogger<WeatherForecastController> logger, ClubMembershipDbContext context)
         {
+            _context = context;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(200);
+            return StatusCode(200, _context.MemberShips);
         }
 
         [HttpPost]

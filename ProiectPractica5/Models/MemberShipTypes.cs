@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProiectPractica5.Models
 {
-    public class MemberShipType
+    public class MemberShipTypes
     {
         [Key]
         public Guid IdMembershipType { get; set; }
