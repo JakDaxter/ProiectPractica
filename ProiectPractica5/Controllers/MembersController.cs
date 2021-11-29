@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
+using ProiectPractica5.Models;
+using System;
 
 namespace ProiectPractica5.Controllers
 {
@@ -23,21 +25,67 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post([FromBody] Members members)
         {
-            return StatusCode(200);
+            try
+            {
+                using (var context = _context)
+                {
+                    var codeS = new Members()
+                    {
+                        IdMembers = Guid.NewGuid(),//nu il trimitem in swagger
+                        Name = members.Name,
+                        Title = members.Title,
+                        Position = members.Position,
+                        Description = members.Description,
+                        Resume = members.Resume//nu il timitem in swagger
+                    };
+                    context.Entry(codeS).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+                    return StatusCode(200, "Code snippet was added in database");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+
         }
 
         [HttpPut]
-        public IActionResult Put()
+        public IActionResult Put([FromBody] Members members)
         {
-            return StatusCode(200);
+            try
+            {
+                using (var context = _context)
+                {
+                    context.Update(members);
+                    context.SaveChanges();
+                }
+                return StatusCode(200, "Code snippet was modify in database");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpDelete]
-        public IActionResult Delete()
+        public IActionResult Delete([FromBody] Members members)
         {
-            return StatusCode(200);
+            try
+            {
+                using (var context = _context)
+                {
+                    context.Remove(members);
+                    context.SaveChanges();
+                }
+                return StatusCode(200, "Code snippet was delete in database");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
     }
 }

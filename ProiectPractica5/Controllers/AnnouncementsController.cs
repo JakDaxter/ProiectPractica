@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
+using ProiectPractica5.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,21 +29,68 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post([FromBody] Announcements announcements)
         {
-            return StatusCode(200);
+            try
+            {
+                using (var context = _context)
+                {
+                    var codeS = new Announcements()
+                    {
+                        IdAnnouncement = Guid.NewGuid(),//nu il trimitem in swagger
+                        ValidFrom = announcements.ValidFrom,
+                        ValidTo = announcements.ValidTo,
+                        Title = announcements.Title,
+                        Text = announcements.Text,
+                        EventDateTime = announcements.EventDateTime,
+                        Tags = announcements.Tags
+                    };
+                    context.Entry(codeS).State = Microsoft.EntityFrameworkCore.EntityState.Added;
+                    context.SaveChanges();
+                    return StatusCode(200, "Code announcements was added in database");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+
         }
 
         [HttpPut]
-        public IActionResult Put()
+        public IActionResult Put([FromBody] Announcements announcements)
         {
-            return StatusCode(200);
+            try
+            {
+                using (var context = _context)
+                {
+                    context.Update(announcements);
+                    context.SaveChanges();
+                }
+                return StatusCode(200, "Code announcements was modify in database");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpDelete]
-        public IActionResult Delete()
+        public IActionResult Delete([FromBody] Announcements announcements)
         {
-            return StatusCode(200);
+            try
+            {
+                using (var context = _context)
+                {
+                    context.Remove(announcements);
+                    context.SaveChanges();
+                }
+                return StatusCode(200, "Code announcements was delete in database");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
     }
 }
