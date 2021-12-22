@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -8,15 +14,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace ProiectPractica5
+namespace ProiectPractica
 {
     public class Startup
     {
@@ -27,67 +31,73 @@ namespace ProiectPractica5
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ClubMembershipDbContext>(options =>
-options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-
-            services.AddAuthentication(options =>
+            services.AddControllers();
+            services.AddSwaggerGen(swagger =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                swagger.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "JWT Token Authentication API",
+                    Description = "ASP.NET Core 3.1 Web API"
+                });
+
+                swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                });
+                swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+
+                    }
+                });
+            });
+
+            services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
             }).AddJwtBearer(options =>
             {
-                options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
-                options.Audience = Configuration["Auth0:Audience"];
-            });
-
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Proiect Practica", Version = "v1.0.0" });
-                var securitySchema = new OpenApiSecurityScheme
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    Description = "Using the Authorization header with the Bearer scheme.",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "https://localhost:44306",
+                    ValidAudience = "https://localhost:44306",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AUTHSECRET_AUTHSECRET")) //Configuration["JwtToken:SecretKey"]  
                 };
-
-
-
-                c.AddSecurityDefinition("Bearer", securitySchema);
-
-
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-{
-{ securitySchema, new[] { "Bearer" } }
-});
-
-
-
             });
-            services.AddControllers();
-
-            services.AddTransient<IUserServices, UserServices>();
+            services.AddTransient<IUserServices, UserServices>(); //.NET CORE 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseAuthentication();
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -103,13 +113,12 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             {
                 endpoints.MapControllers();
             });
-
+            app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/Swagger/v1/swagger.json", "API Practica");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Practica");
             });
         }
-
     }
 }

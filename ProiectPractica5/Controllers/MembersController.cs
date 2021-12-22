@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
@@ -8,6 +9,7 @@ namespace ProiectPractica5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class MembersController : ControllerBase
     {
         private readonly ClubMembershipDbContext _context;

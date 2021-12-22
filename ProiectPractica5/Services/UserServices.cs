@@ -29,16 +29,20 @@ namespace ProiectPractica5.Services
 
         private string GenerateJWTToken(Members user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("AUTHSECRET");
-            var tokenDesc = new SecurityTokenDescriptor
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(new[] { new Claim("IdMembers", user.IdMembers.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDesc);
-            return tokenHandler.WriteToken(token);
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AUTHSECRET_AUTHSECRET"));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+
+
+            var token = new JwtSecurityToken("https://localhost:44306",
+            "https://localhost:44306",
+            null,
+            expires: DateTime.Now.AddDays(3),
+            signingCredentials: credentials);
+
+
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

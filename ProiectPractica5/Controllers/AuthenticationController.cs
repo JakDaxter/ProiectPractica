@@ -1,18 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProiectPractica5.Models.Authentication;
 using ProiectPractica5.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProiectPractica5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class AuthenticationController : ControllerBase
     {
         private IUserServices _userService;
@@ -20,8 +14,6 @@ namespace ProiectPractica5.Controllers
         {
             _userService = userService;
         }
-
-
 
         [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequest model)

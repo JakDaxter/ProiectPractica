@@ -10,7 +10,7 @@ namespace ProiectPractica5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class CodeSnippetsControllers : ControllerBase
     {
         private readonly ClubMembershipDbContext _context;
