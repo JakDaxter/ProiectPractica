@@ -11,33 +11,33 @@ namespace ProiectPractica5.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-    public class MemberShipsController : ControllerBase
+    public class MemberShipTypesController : ControllerBase
     {
-        private readonly IMemberShipsServices _memberShipsServices;
+        private readonly IMemberShipTypesServices _memberShipTypesServices;
         private readonly ILogger<CodeSnippetsControllers> _logger;
-        public MemberShipsController(ILogger<CodeSnippetsControllers> logger, IMemberShipsServices memberShipsServices)
+        public MemberShipTypesController(ILogger<CodeSnippetsControllers> logger, IMemberShipTypesServices memberShipTypesServices)
         {
-            _memberShipsServices = memberShipsServices;
+            _memberShipTypesServices = memberShipTypesServices;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            if (_memberShipsServices != null)
+            if (_memberShipTypesServices != null)
             {
-                return StatusCode(200, _memberShipsServices.Get());
+                return StatusCode(200, _memberShipTypesServices.Get());
             }
-            return StatusCode(404, "No MemberShip Found");
+            return StatusCode(404, "No MemberShipType Found");
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] MemberShips memberShips)
+        public IActionResult Post([FromBody] MemberShipTypes memberShipTypes)
         {
             try
             {
-                _memberShipsServices.Post(memberShips);
-                return StatusCode(200, "MemberShip was added in database");
+                _memberShipTypesServices.Post(memberShipTypes);
+                return StatusCode(200, "MemberShipType was added in database");
 
             }
             catch (Exception ex)
@@ -48,12 +48,12 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] MemberShips memberShips)
+        public IActionResult Put([FromBody] MemberShipTypes memberShipTypes)
         {
             try
             {
-                _memberShipsServices.Put(memberShips);
-                return StatusCode(200, "MemberShip was modify in database");
+                _memberShipTypesServices.Put(memberShipTypes);
+                return StatusCode(200, "MemberShipType was modify in database");
             }
             catch (Exception ex)
             {
@@ -62,12 +62,12 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBody] MemberShips memberShips)
+        public IActionResult Delete([FromBody] MemberShipTypes memberShipTypes)
         {
             try
             {
-                _memberShipsServices.Delete(memberShips);
-                return StatusCode(200, "MemberShip was delete in database");
+                _memberShipTypesServices.Delete(memberShipTypes);
+                return StatusCode(200, "MemberShipType was delete in database");
             }
             catch (Exception ex)
             {

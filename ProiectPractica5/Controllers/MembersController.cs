@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
+using ProiectPractica5.Services;
 using System;
 
 namespace ProiectPractica5.Controllers
@@ -12,18 +13,22 @@ namespace ProiectPractica5.Controllers
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class MembersController : ControllerBase
     {
-        private readonly ClubMembershipDbContext _context;
-        private readonly ILogger<WeatherForecastController> _logger;
-        public MembersController(ILogger<WeatherForecastController> logger, ClubMembershipDbContext context)
+        private readonly IMembersServices _membersServices;
+        private readonly ILogger<CodeSnippetsControllers> _logger;
+        public MembersController(ILogger<CodeSnippetsControllers> logger, IMembersServices memberServices)
         {
-            _context = context;
+            _membersServices = memberServices;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(200, _context.Members);
+            if (_membersServices != null)
+            {
+                return StatusCode(200, _membersServices.Get());
+            }
+            return StatusCode(404, "No Members Found");
         }
 
         [HttpPost]
@@ -31,21 +36,9 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    var codeS = new Members()
-                    {
-                        IdMembers = Guid.NewGuid(),//nu il trimitem in swagger
-                        Name = members.Name,
-                        Title = members.Title,
-                        Position = members.Position,
-                        Description = members.Description,
-                        Resume = members.Resume//nu il timitem in swagger
-                    };
-                    context.Entry(codeS).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    context.SaveChanges();
-                    return StatusCode(200, "Code snippet was added in database");
-                }
+                _membersServices.Post(members);
+                return StatusCode(200, "Member was added in database");
+
             }
             catch (Exception ex)
             {
@@ -59,12 +52,8 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    context.Update(members);
-                    context.SaveChanges();
-                }
-                return StatusCode(200, "Code snippet was modify in database");
+               _membersServices.Put(members);
+                return StatusCode(200, "Member was modify in database");
             }
             catch (Exception ex)
             {
@@ -77,12 +66,8 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    context.Remove(members);
-                    context.SaveChanges();
-                }
-                return StatusCode(200, "Code snippet was delete in database");
+                _membersServices.Delete(members);
+                return StatusCode(200, "Member was delete in database");
             }
             catch (Exception ex)
             {

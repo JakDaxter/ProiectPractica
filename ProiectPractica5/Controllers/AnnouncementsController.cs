@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
+using ProiectPractica5.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,18 +17,22 @@ namespace ProiectPractica5.Controllers
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class AnnouncementsController : ControllerBase
     {
-        private readonly ClubMembershipDbContext _context;
-        private readonly ILogger<WeatherForecastController> _logger;
-        public AnnouncementsController(ILogger<WeatherForecastController> logger, ClubMembershipDbContext context)
+        private readonly IAnnouncementsServices _announcementsServices;
+        private readonly ILogger<AnnouncementsController> _logger;
+        public AnnouncementsController(ILogger<AnnouncementsController> logger, IAnnouncementsServices announcementsServices)
         {
-            _context = context;
+            _announcementsServices = announcementsServices;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(200, _context.Announcements);
+            if (_announcementsServices != null)
+            {
+                return StatusCode(200, _announcementsServices.Get());
+            }
+            return StatusCode(404, "No Announcements Found");
         }
 
         [HttpPost]
@@ -35,22 +40,9 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    var codeS = new Announcements()
-                    {
-                        IdAnnouncement = Guid.NewGuid(),//nu il trimitem in swagger
-                        ValidFrom = announcements.ValidFrom,
-                        ValidTo = announcements.ValidTo,
-                        Title = announcements.Title,
-                        Text = announcements.Text,
-                        EventDateTime = announcements.EventDateTime,
-                        Tags = announcements.Tags
-                    };
-                    context.Entry(codeS).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    context.SaveChanges();
-                    return StatusCode(200, "Code announcements was added in database");
-                }
+                _announcementsServices.Post(announcements);
+                return StatusCode(200, "Announcements was added in database");
+
             }
             catch (Exception ex)
             {
@@ -64,12 +56,8 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    context.Update(announcements);
-                    context.SaveChanges();
-                }
-                return StatusCode(200, "Code announcements was modify in database");
+                _announcementsServices.Put(announcements);
+                return StatusCode(200, "Announcemets was modify in database");
             }
             catch (Exception ex)
             {
@@ -82,12 +70,8 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    context.Remove(announcements);
-                    context.SaveChanges();
-                }
-                return StatusCode(200, "Code announcements was delete in database");
+                _announcementsServices.Delete(announcements);
+                return StatusCode(200, "Code snippet was delete in database");
             }
             catch (Exception ex)
             {
