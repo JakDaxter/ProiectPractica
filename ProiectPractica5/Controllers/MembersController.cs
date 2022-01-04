@@ -13,8 +13,8 @@ namespace ProiectPractica5.Controllers
     public class MembersController : ControllerBase
     {
         private readonly ClubMembershipDbContext _context;
-        private readonly ILogger<WeatherForecastController> _logger;
-        public MembersController(ILogger<WeatherForecastController> logger, ClubMembershipDbContext context)
+        private readonly ILogger<MembersController> _logger;
+        public MembersController(ILogger<MembersController> logger, ClubMembershipDbContext context)
         {
             _context = context;
             _logger = logger;
