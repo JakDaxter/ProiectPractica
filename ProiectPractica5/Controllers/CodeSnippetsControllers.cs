@@ -29,7 +29,7 @@ namespace ProiectPractica5.Controllers
             {
                 return StatusCode(200, _codeSnippetsServices.Get()) ;
             }
-            return StatusCode(404,"No codeSnippetsFound");
+            return StatusCode(404,"No codeSnippets Found");
         }
         
         [HttpPost]
@@ -38,7 +38,7 @@ namespace ProiectPractica5.Controllers
             try
             {
                 _codeSnippetsServices.Post(codeShippets);
-                return StatusCode(200, "Code snippet was added in database");
+                return StatusCode(200, "CodeSnippet was added in database");
                 
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace ProiectPractica5.Controllers
             try
             {
                 _codeSnippetsServices.Put(codeShippets);
-                return StatusCode(200, "Code snippet was modify in database");
+                return StatusCode(200, "CodeSnippet was modify in database");
             }
             catch (Exception ex)
             {
@@ -68,7 +68,7 @@ namespace ProiectPractica5.Controllers
             try
             {
                 _codeSnippetsServices.Delete(codeShippets);
-                return StatusCode(200, "Code snippet was delete in database");
+                return StatusCode(200, "CodeSnippet was delete in database");
             }
             catch (Exception ex)
             {

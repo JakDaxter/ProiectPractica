@@ -32,7 +32,7 @@ namespace ProiectPractica5.Controllers
             {
                 return StatusCode(200, _announcementsServices.Get());
             }
-            return StatusCode(404, "No codeSnippetsFound");
+            return StatusCode(404, "No Announcements Found");
         }
 
         [HttpPost]
