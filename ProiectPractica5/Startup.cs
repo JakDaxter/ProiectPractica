@@ -98,6 +98,7 @@ namespace ProiectPractica
             services.AddTransient<IAnnouncementsServices, AnnouncementsServices>();
             services.AddTransient<IMembersServices, MembersServices>();
             services.AddTransient<IMemberShipTypesServices, MemberShipTypesServices>();
+            services.AddTransient<IMemberShipsServices, MemberShipsServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

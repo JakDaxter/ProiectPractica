@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
+using ProiectPractica5.Services;
 using System;
 
 namespace ProiectPractica5.Controllers
@@ -12,18 +13,22 @@ namespace ProiectPractica5.Controllers
     [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
     public class MemberShipsController : ControllerBase
     {
-        private readonly ClubMembershipDbContext _context;
-        private readonly ILogger<MemberShipsController> _logger;
-        public MemberShipsController(ILogger<MemberShipsController> logger, ClubMembershipDbContext context)
+        private readonly IMemberShipsServices _memberShipsServices;
+        private readonly ILogger<CodeSnippetsControllers> _logger;
+        public MemberShipsController(ILogger<CodeSnippetsControllers> logger, IMemberShipsServices memberShipsServices)
         {
-            _context = context;
+            _memberShipsServices = memberShipsServices;
             _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return StatusCode(200, _context.MemberShips);
+            if (_memberShipsServices != null)
+            {
+                return StatusCode(200, _memberShipsServices.Get());
+            }
+            return StatusCode(404, "No MemberShip Found");
         }
 
         [HttpPost]
@@ -31,21 +36,9 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    var codeS = new MemberShips()
-                    {
-                        IdMembership = Guid.NewGuid(),//nu il trimitem in swagger
-                        IdMember = memberShips.IdMember,
-                        IdMembershipType = memberShips.IdMembershipType,
-                        StartData = memberShips.StartData,
-                        EndData = memberShips.EndData,
-                        Lvl = memberShips.Lvl//nu il timitem in swagger
-                    };
-                    context.Entry(codeS).State = Microsoft.EntityFrameworkCore.EntityState.Added;
-                    context.SaveChanges();
-                    return StatusCode(200, "Code snippet was added in database");
-                }
+                _memberShipsServices.Post(memberShips);
+                return StatusCode(200, "MemberShip was added in database");
+
             }
             catch (Exception ex)
             {
@@ -59,12 +52,8 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    context.Update(memberShips);
-                    context.SaveChanges();
-                }
-                return StatusCode(200, "Code snippet was modify in database");
+                _memberShipsServices.Put(memberShips);
+                return StatusCode(200, "MemberShip was modify in database");
             }
             catch (Exception ex)
             {
@@ -77,12 +66,8 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                using (var context = _context)
-                {
-                    context.Remove(memberShips);
-                    context.SaveChanges();
-                }
-                return StatusCode(200, "Code snippet was delete in database");
+                _memberShipsServices.Delete(memberShips);
+                return StatusCode(200, "MemberShip was delete in database");
             }
             catch (Exception ex)
             {
