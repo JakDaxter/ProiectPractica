@@ -18,20 +18,20 @@ namespace ProiectPractica5.Services
         }
 
 
-        public void Delete(CodeShippets codeShippets)
+        public void Delete(CodeSnippets codeShippets)
         {
             _context.Remove(codeShippets);
             _context.SaveChanges();
         }
 
-        public DbSet<CodeShippets> Get()
+        public DbSet<CodeSnippets> Get()
         {
             return _context.CodeShippets;
         }
 
-        public void Post(CodeShippets codeShippets)
+        public void Post(CodeSnippets codeShippets)
         {
-            var codeS = new CodeShippets()
+            var codeS = new CodeSnippets()
             {
                 IdCodeShippet = Guid.NewGuid(),//nu il trimitem in swagger
                 Title = codeShippets.Title,
@@ -44,7 +44,7 @@ namespace ProiectPractica5.Services
             _context.SaveChanges();
         }
 
-        public void Put(CodeShippets codeShippets)
+        public void Put(CodeSnippets codeShippets)
         {
             _context.Update(codeShippets);
             _context.SaveChanges();

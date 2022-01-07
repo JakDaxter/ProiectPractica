@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
+using System.Linq;
 using System.Text.Json;
 
 namespace ProiectPractica5.Controllers
@@ -25,31 +27,39 @@ namespace ProiectPractica5.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            if (_codeSnippetsServices != null)
+            DbSet<CodeSnippets> codeSnippets = _codeSnippetsServices.Get();
+            if (codeSnippets != null)
             {
-                return StatusCode(200, _codeSnippetsServices.Get()) ;
+                if (codeSnippets.ToList().Count > 0) ;
+                {
+                    return StatusCode(200, _codeSnippetsServices.Get());
+                }
             }
-            return StatusCode(404,"No codeSnippets Found");
+            return StatusCode(404);
         }
         
         [HttpPost]
-        public IActionResult Post([FromBody] CodeShippets codeShippets)
+        public IActionResult Post([FromBody] CodeSnippets codeShippets)
         {
             try
             {
-                _codeSnippetsServices.Post(codeShippets);
-                return StatusCode(200, "CodeSnippet was added in database");
+                if(codeShippets != null)
+                {
+                    _codeSnippetsServices.Post(codeShippets);
+                    return StatusCode(201, "CodeSnippet was added in database");
+                }
                 
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
             
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] CodeShippets codeShippets)
+        public IActionResult Put([FromBody] CodeSnippets codeShippets)
         {
             try
             {
@@ -63,7 +73,7 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBody] CodeShippets codeShippets)
+        public IActionResult Delete([FromBody] CodeSnippets codeShippets)
         {
             try
             {

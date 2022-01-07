@@ -8,10 +8,10 @@ namespace ProiectPractica5.Services
 {
     public interface ICodeSnippetsServices
     {
-        public DbSet<CodeShippets> Get();
-        public void Put(CodeShippets codeShippets);
-        public void  Post(CodeShippets codeShippets);
-        public void Delete(CodeShippets codeShippets);
+        public DbSet<CodeSnippets> Get();
+        public void Put(CodeSnippets codeShippets);
+        public void  Post(CodeSnippets codeShippets);
+        public void Delete(CodeSnippets codeShippets);
 
     }
 }
