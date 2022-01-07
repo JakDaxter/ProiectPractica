@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProiectPractica5.Models
 {
-    public class CodeShippets
+    public class CodeSnippets
     {
         [Key]
         public Guid IdCodeShippet { get; set; }
