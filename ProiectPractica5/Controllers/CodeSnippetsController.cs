@@ -14,11 +14,11 @@ namespace ProiectPractica5.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-    public class CodeSnippetsControllers : ControllerBase
+    public class CodeSnippetsController : ControllerBase
     {
         private readonly ICodeSnippetsServices _codeSnippetsServices;
-        private readonly ILogger<CodeSnippetsControllers> _logger;
-        public CodeSnippetsControllers(ILogger<CodeSnippetsControllers> logger, ICodeSnippetsServices codeSnippetsServices)
+        private readonly ILogger<CodeSnippetsController> _logger;
+        public CodeSnippetsController(ILogger<CodeSnippetsController> logger, ICodeSnippetsServices codeSnippetsServices)
         {
             _codeSnippetsServices = codeSnippetsServices;
             _logger = logger;
@@ -63,13 +63,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _codeSnippetsServices.Put(codeShippets);
-                return StatusCode(200, "CodeSnippet was modify in database");
+                if (codeShippets != null)
+                {
+                    _codeSnippetsServices.Put(codeShippets);
+                    return StatusCode(201, "CodeSnippet was modify in database");
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500,ex);
             }
+            return StatusCode(500);
         }
 
         [HttpDelete]
@@ -77,13 +81,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _codeSnippetsServices.Delete(codeShippets);
-                return StatusCode(200, "CodeSnippet was delete in database");
+                if (codeShippets != null)
+                {
+                    _codeSnippetsServices.Delete(codeShippets);
+                    return StatusCode(201, "CodeSnippet was delete in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
     }
 }

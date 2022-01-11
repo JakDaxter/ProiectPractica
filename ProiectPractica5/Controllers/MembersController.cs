@@ -14,8 +14,8 @@ namespace ProiectPractica5.Controllers
     public class MembersController : ControllerBase
     {
         private readonly IMembersServices _membersServices;
-        private readonly ILogger<CodeSnippetsControllers> _logger;
-        public MembersController(ILogger<CodeSnippetsControllers> logger, IMembersServices memberServices)
+        private readonly ILogger<CodeSnippetsController> _logger;
+        public MembersController(ILogger<CodeSnippetsController> logger, IMembersServices memberServices)
         {
             _membersServices = memberServices;
             _logger = logger;

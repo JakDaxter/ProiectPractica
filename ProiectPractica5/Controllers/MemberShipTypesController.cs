@@ -14,8 +14,8 @@ namespace ProiectPractica5.Controllers
     public class MemberShipTypesController : ControllerBase
     {
         private readonly IMemberShipTypesServices _memberShipTypesServices;
-        private readonly ILogger<CodeSnippetsControllers> _logger;
-        public MemberShipTypesController(ILogger<CodeSnippetsControllers> logger, IMemberShipTypesServices memberShipTypesServices)
+        private readonly ILogger<CodeSnippetsController> _logger;
+        public MemberShipTypesController(ILogger<CodeSnippetsController> logger, IMemberShipTypesServices memberShipTypesServices)
         {
             _memberShipTypesServices = memberShipTypesServices;
             _logger = logger;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
@@ -28,11 +29,15 @@ namespace ProiectPractica5.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            if (_announcementsServices != null)
+            DbSet<Announcements> codeSnippets = _announcementsServices.Get();
+            if (codeSnippets != null)
             {
-                return StatusCode(200, _announcementsServices.Get());
+                if (codeSnippets.ToList().Count > 0) ;
+                {
+                    return StatusCode(201, _announcementsServices.Get());
+                }
             }
-            return StatusCode(404, "No Announcements Found");
+            return StatusCode(404);
         }
 
         [HttpPost]
@@ -40,14 +45,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _announcementsServices.Post(announcements);
-                return StatusCode(200, "Announcements was added in database");
-
+                if (announcements != null)
+                {
+                    _announcementsServices.Post(announcements);
+                    return StatusCode(201, "Announcements was added in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
 
         }
 
@@ -56,13 +64,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _announcementsServices.Put(announcements);
-                return StatusCode(200, "Announcemets was modify in database");
+                if (announcements != null)
+                {
+                    _announcementsServices.Put(announcements);
+                    return StatusCode(201, "Announcements was modify in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
 
         [HttpDelete]
@@ -70,13 +82,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _announcementsServices.Delete(announcements);
-                return StatusCode(200, "Code snippet was delete in database");
+                if (announcements != null)
+                {
+                    _announcementsServices.Delete(announcements);
+                    return StatusCode(201, "Announcements was delete in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
     }
 }
