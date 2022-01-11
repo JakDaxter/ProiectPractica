@@ -26,10 +26,10 @@ namespace ProiectPractica5.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            DbSet<MemberShipTypes> members = _memberShipTypesServices.Get();
-            if (members != null)
+            DbSet<MemberShipTypes> memberShipTypes = _memberShipTypesServices.Get();
+            if (memberShipTypes != null)
             {
-                if (members.ToList().Count > 0) 
+                if (memberShipTypes.ToList().Count > 0) 
                 {
                     return StatusCode(201, _memberShipTypesServices.Get());
                 }
