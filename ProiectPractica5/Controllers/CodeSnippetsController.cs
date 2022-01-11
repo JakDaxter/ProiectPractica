@@ -30,7 +30,7 @@ namespace ProiectPractica5.Controllers
             DbSet<CodeSnippets> codeSnippets = _codeSnippetsServices.Get();
             if (codeSnippets != null)
             {
-                if (codeSnippets.ToList().Count > 0) ;
+                if (codeSnippets.ToList().Count > 0) 
                 {
                     return StatusCode(200, _codeSnippetsServices.Get());
                 }

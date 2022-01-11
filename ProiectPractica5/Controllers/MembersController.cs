@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
+using System.Linq;
 
 namespace ProiectPractica5.Controllers
 {
@@ -14,8 +16,8 @@ namespace ProiectPractica5.Controllers
     public class MembersController : ControllerBase
     {
         private readonly IMembersServices _membersServices;
-        private readonly ILogger<CodeSnippetsController> _logger;
-        public MembersController(ILogger<CodeSnippetsController> logger, IMembersServices memberServices)
+        private readonly ILogger<MembersController> _logger;
+        public MembersController(ILogger<MembersController> logger, IMembersServices memberServices)
         {
             _membersServices = memberServices;
             _logger = logger;
@@ -24,11 +26,15 @@ namespace ProiectPractica5.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            if (_membersServices != null)
+            DbSet<Members> members = _membersServices.Get();
+            if (members != null)
             {
-                return StatusCode(200, _membersServices.Get());
+                if (members.ToList().Count > 0) 
+                {
+                    return StatusCode(201, _membersServices.Get());
+                }
             }
-            return StatusCode(404, "No Members Found");
+            return StatusCode(404);
         }
 
         [HttpPost]
@@ -36,14 +42,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _membersServices.Post(members);
-                return StatusCode(200, "Member was added in database");
-
+                if (members != null)
+                {
+                    _membersServices.Post(members);
+                    return StatusCode(201, "Member was added in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
 
         }
 
@@ -52,13 +61,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-               _membersServices.Put(members);
-                return StatusCode(200, "Member was modify in database");
+                if (members != null)
+                {
+                    _membersServices.Put(members);
+                    return StatusCode(201, "Member was modify in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
 
         [HttpDelete]
@@ -66,13 +79,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _membersServices.Delete(members);
-                return StatusCode(200, "Member was delete in database");
+                if (members != null)
+                {
+                    _membersServices.Delete(members);
+                    return StatusCode(201, "Member was delete in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
     }
 }

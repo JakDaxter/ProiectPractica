@@ -36,6 +36,7 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
+
                 _memberShipsServices.Post(memberShips);
                 return StatusCode(200, "MemberShip was added in database");
 
