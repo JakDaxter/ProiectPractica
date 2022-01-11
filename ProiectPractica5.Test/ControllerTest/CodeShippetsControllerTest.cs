@@ -3,15 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
-using ProiectPractica5.App_Data;
 using ProiectPractica5.Controllers;
 using ProiectPractica5.Models;
 using ProiectPractica5.Services;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using Xunit;
 
 namespace ProiectPractica5.Test.ControllerTest
@@ -104,7 +101,7 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("CodeSnippet was added in database",objectResult.Value);
+            Assert.Equal(Constants.CreateCodeSnippetMessage,objectResult.Value);
             Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
         }
 
@@ -125,7 +122,7 @@ namespace ProiectPractica5.Test.ControllerTest
 
             //Assert
             var resultStatusCode = Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(resultStatusCode.StatusCode, (int)HttpStatusCode.InternalServerError);
+            Assert.Equal(resultStatusCode.StatusCode, (int)HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -145,8 +142,8 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("CodeSnippet was modify in database", objectResult.Value);
-            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
+            Assert.Equal(Constants.UpdateCodeSnippetMessage, objectResult.Value);
+            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Accepted);
         }
 
         #endregion
@@ -175,9 +172,7 @@ namespace ProiectPractica5.Test.ControllerTest
             //Arrange
             _controller = new CodeSnippetsController(_logger.Object, _services.Object);
             var codeSnippet = new CodeSnippets { Title = "Test", ContentCode = "test" };
-            _controller.Post(codeSnippet);
-            _services.Setup(m => m.Post(codeSnippet));
-            var codeSnippedAdded = _services.Setup(m => m.Delete(codeSnippet));
+            var codeSnippedDeleted = _services.Setup(m => m.Delete(codeSnippet));
 
             //Act
             var result = _controller.Delete(codeSnippet);
@@ -186,8 +181,8 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("CodeSnippet was delete in database", objectResult.Value);
-            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
+            Assert.Equal(Constants.DeleteCodeSnippetMessage, objectResult.Value);
+            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.OK);
         }
 
         #endregion

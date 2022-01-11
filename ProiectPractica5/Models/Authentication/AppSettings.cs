@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ProiectPractica5.Models.Authentication
+﻿namespace ProiectPractica5.Models.Authentication
 {
     public class AppSettings
     {

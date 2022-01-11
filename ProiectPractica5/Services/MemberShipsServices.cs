@@ -2,9 +2,6 @@
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProiectPractica5.Services
 {

@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace ProiectPractica5.Test
