@@ -1,24 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
 using System.Linq;
-using System.Text.Json;
+using System.Net;
 
 namespace ProiectPractica5.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
-    public class CodeSnippetsControllers : ControllerBase
+    public class CodeSnippetsController : ControllerBase
     {
         private readonly ICodeSnippetsServices _codeSnippetsServices;
-        private readonly ILogger<CodeSnippetsControllers> _logger;
-        public CodeSnippetsControllers(ILogger<CodeSnippetsControllers> logger, ICodeSnippetsServices codeSnippetsServices)
+        private readonly ILogger<CodeSnippetsController> _logger;
+        public CodeSnippetsController(ILogger<CodeSnippetsController> logger, ICodeSnippetsServices codeSnippetsServices)
         {
             _codeSnippetsServices = codeSnippetsServices;
             _logger = logger;
@@ -30,7 +28,7 @@ namespace ProiectPractica5.Controllers
             DbSet<CodeSnippets> codeSnippets = _codeSnippetsServices.Get();
             if (codeSnippets != null)
             {
-                if (codeSnippets.ToList().Count > 0) ;
+                if (codeSnippets.ToList().Count > 0) 
                 {
                     return StatusCode(200, _codeSnippetsServices.Get());
                 }
@@ -46,7 +44,7 @@ namespace ProiectPractica5.Controllers
                 if(codeShippets != null)
                 {
                     _codeSnippetsServices.Post(codeShippets);
-                    return StatusCode(201, "CodeSnippet was added in database");
+                    return StatusCode(201, Constants.CreateCodeSnippetMessage);
                 }
                 
             }
@@ -63,13 +61,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _codeSnippetsServices.Put(codeShippets);
-                return StatusCode(200, "CodeSnippet was modify in database");
+                if (codeShippets != null)
+                {
+                    _codeSnippetsServices.Put(codeShippets);
+                    return StatusCode(202, Constants.UpdateCodeSnippetMessage);
+                }
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex);
+                return StatusCode(500,ex);
             }
+            return StatusCode((int)HttpStatusCode.NotFound);
         }
 
         [HttpDelete]
@@ -77,13 +79,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _codeSnippetsServices.Delete(codeShippets);
-                return StatusCode(200, "CodeSnippet was delete in database");
+                if (codeShippets != null)
+                {
+                    _codeSnippetsServices.Delete(codeShippets);
+                    return StatusCode(200, Constants.DeleteCodeSnippetMessage);
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
+using System.Linq;
 
 namespace ProiectPractica5.Controllers
 {
@@ -14,8 +15,8 @@ namespace ProiectPractica5.Controllers
     public class MemberShipsController : ControllerBase
     {
         private readonly IMemberShipsServices _memberShipsServices;
-        private readonly ILogger<CodeSnippetsControllers> _logger;
-        public MemberShipsController(ILogger<CodeSnippetsControllers> logger, IMemberShipsServices memberShipsServices)
+        private readonly ILogger<MemberShipsController> _logger;
+        public MemberShipsController(ILogger<MemberShipsController> logger, IMemberShipsServices memberShipsServices)
         {
             _memberShipsServices = memberShipsServices;
             _logger = logger;
@@ -24,11 +25,15 @@ namespace ProiectPractica5.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            if (_memberShipsServices != null)
+            DbSet<MemberShips> memberShips = _memberShipsServices.Get();
+            if (memberShips != null)
             {
-                return StatusCode(200, _memberShipsServices.Get());
+                if (memberShips.ToList().Count > 0)
+                {
+                    return StatusCode(201, _memberShipsServices.Get());
+                }
             }
-            return StatusCode(404, "No MemberShip Found");
+            return StatusCode(404);
         }
 
         [HttpPost]
@@ -36,14 +41,18 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _memberShipsServices.Post(memberShips);
-                return StatusCode(200, "MemberShip was added in database");
+                if (memberShips != null)
+                {
+                    _memberShipsServices.Post(memberShips);
+                    return StatusCode(201, "MemberShip was added in database");
+                }
 
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
 
         }
 
@@ -52,13 +61,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _memberShipsServices.Put(memberShips);
-                return StatusCode(200, "MemberShip was modify in database");
+                if (memberShips != null)
+                {
+                    _memberShipsServices.Put(memberShips);
+                    return StatusCode(201, "MemberShip was modify in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
 
         [HttpDelete]
@@ -66,13 +79,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _memberShipsServices.Delete(memberShips);
-                return StatusCode(200, "MemberShip was delete in database");
+                if (memberShips != null)
+                {
+                    _memberShipsServices.Delete(memberShips);
+                    return StatusCode(201, "MemberShip was delete in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
     }
 }

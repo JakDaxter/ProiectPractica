@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
+using System.Linq;
 
 namespace ProiectPractica5.Controllers
 {
@@ -14,8 +15,8 @@ namespace ProiectPractica5.Controllers
     public class MemberShipTypesController : ControllerBase
     {
         private readonly IMemberShipTypesServices _memberShipTypesServices;
-        private readonly ILogger<CodeSnippetsControllers> _logger;
-        public MemberShipTypesController(ILogger<CodeSnippetsControllers> logger, IMemberShipTypesServices memberShipTypesServices)
+        private readonly ILogger<MemberShipTypesController> _logger;
+        public MemberShipTypesController(ILogger<MemberShipTypesController> logger, IMemberShipTypesServices memberShipTypesServices)
         {
             _memberShipTypesServices = memberShipTypesServices;
             _logger = logger;
@@ -24,11 +25,15 @@ namespace ProiectPractica5.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            if (_memberShipTypesServices != null)
+            DbSet<MemberShipTypes> memberShipTypes = _memberShipTypesServices.Get();
+            if (memberShipTypes != null)
             {
-                return StatusCode(200, _memberShipTypesServices.Get());
+                if (memberShipTypes.ToList().Count > 0) 
+                {
+                    return StatusCode(201, _memberShipTypesServices.Get());
+                }
             }
-            return StatusCode(404, "No MemberShipType Found");
+            return StatusCode(404);
         }
 
         [HttpPost]
@@ -36,14 +41,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _memberShipTypesServices.Post(memberShipTypes);
-                return StatusCode(200, "MemberShipType was added in database");
-
+                if (memberShipTypes != null)
+                {
+                    _memberShipTypesServices.Post(memberShipTypes);
+                    return StatusCode(201, "MemberShipType was added in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
 
         }
 
@@ -52,13 +60,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _memberShipTypesServices.Put(memberShipTypes);
-                return StatusCode(200, "MemberShipType was modify in database");
+                if (memberShipTypes != null)
+                {
+                    _memberShipTypesServices.Put(memberShipTypes);
+                    return StatusCode(201, "MemberShipType was modify in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
 
         [HttpDelete]
@@ -66,13 +78,17 @@ namespace ProiectPractica5.Controllers
         {
             try
             {
-                _memberShipTypesServices.Delete(memberShipTypes);
-                return StatusCode(200, "MemberShipType was delete in database");
+                if (memberShipTypes != null)
+                {
+                    _memberShipTypesServices.Delete(memberShipTypes);
+                    return StatusCode(201, "MemberShipType was delete in database");
+                }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
+            return StatusCode(500);
         }
     }
 }
