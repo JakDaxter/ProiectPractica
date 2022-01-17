@@ -123,7 +123,7 @@ namespace ProiectPractica5.Test.ControllerTest
 
             //Assert
             var resultStatusCode = Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(resultStatusCode.StatusCode, (int)HttpStatusCode.InternalServerError);
+            Assert.Equal(resultStatusCode.StatusCode, (int)HttpStatusCode.NotFound);
         }
 
         [Fact]

@@ -6,6 +6,7 @@ using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace ProiectPractica5.Controllers
 {
@@ -70,7 +71,7 @@ namespace ProiectPractica5.Controllers
             {
                 return StatusCode(500, ex);
             }
-            return StatusCode(500);
+            return StatusCode((int)HttpStatusCode.NotFound);
         }
 
         [HttpDelete]
