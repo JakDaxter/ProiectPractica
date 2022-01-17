@@ -30,7 +30,7 @@ namespace ProiectPractica5.Controllers
             {
                 if (memberShips.ToList().Count > 0)
                 {
-                    return StatusCode(201, _memberShipsServices.Get());
+                    return StatusCode(200, _memberShipsServices.Get());
                 }
             }
             return StatusCode(404);
@@ -44,7 +44,7 @@ namespace ProiectPractica5.Controllers
                 if (memberShips != null)
                 {
                     _memberShipsServices.Post(memberShips);
-                    return StatusCode(201, "MemberShip was added in database");
+                    return StatusCode(201, Constants.CreateMemberShipsMessage);
                 }
 
             }
@@ -64,7 +64,7 @@ namespace ProiectPractica5.Controllers
                 if (memberShips != null)
                 {
                     _memberShipsServices.Put(memberShips);
-                    return StatusCode(201, "MemberShip was modify in database");
+                    return StatusCode(202, Constants.UpdateMemberShipsMessage);
                 }
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace ProiectPractica5.Controllers
                 if (memberShips != null)
                 {
                     _memberShipsServices.Delete(memberShips);
-                    return StatusCode(201, "MemberShip was delete in database");
+                    return StatusCode(200, Constants.DeleteMemberShipsMessage);
                 }
             }
             catch (Exception ex)

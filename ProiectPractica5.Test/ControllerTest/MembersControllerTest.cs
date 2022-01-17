@@ -101,7 +101,7 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("Member was added in database", objectResult.Value);
+            Assert.Equal(Constants.CreateMembersMessage, objectResult.Value);
             Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
         }
 
@@ -142,8 +142,8 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("Member was modify in database", objectResult.Value);
-            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
+            Assert.Equal(Constants.UpdateMembersMessage, objectResult.Value);
+            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Accepted);
         }
 
         #endregion
@@ -183,8 +183,8 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("Member was delete in database", objectResult.Value);
-            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
+            Assert.Equal(Constants.DeleteMembersMessage, objectResult.Value);
+            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.OK);
         }
 
         #endregion
