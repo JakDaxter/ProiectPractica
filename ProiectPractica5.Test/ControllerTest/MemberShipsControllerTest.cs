@@ -102,7 +102,7 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("MemberShip was added in database", objectResult.Value);
+            Assert.Equal(Constants.CreateMemberShipsMessage, objectResult.Value);
             Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
         }
 
@@ -123,7 +123,7 @@ namespace ProiectPractica5.Test.ControllerTest
 
             //Assert
             var resultStatusCode = Assert.IsType<StatusCodeResult>(result);
-            Assert.Equal(resultStatusCode.StatusCode, (int)HttpStatusCode.InternalServerError);
+            Assert.Equal(resultStatusCode.StatusCode, (int)HttpStatusCode.NotFound);
         }
 
         [Fact]
@@ -143,8 +143,8 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("MemberShip was modify in database", objectResult.Value);
-            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
+            Assert.Equal(Constants.UpdateMemberShipsMessage, objectResult.Value);
+            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Accepted);
         }
 
         #endregion
@@ -184,8 +184,8 @@ namespace ProiectPractica5.Test.ControllerTest
             //Assert
             Assert.NotNull(result);
             var objectResult = Assert.IsType<ObjectResult>(result);
-            Assert.Equal("MemberShip was delete in database", objectResult.Value);
-            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.Created);
+            Assert.Equal(Constants.DeleteMemberShipsMessage, objectResult.Value);
+            Assert.Equal(objectResult.StatusCode, (int)HttpStatusCode.OK);
         }
 
         #endregion

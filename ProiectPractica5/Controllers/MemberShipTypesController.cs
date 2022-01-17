@@ -6,6 +6,7 @@ using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace ProiectPractica5.Controllers
 {
@@ -30,7 +31,7 @@ namespace ProiectPractica5.Controllers
             {
                 if (memberShipTypes.ToList().Count > 0) 
                 {
-                    return StatusCode(201, _memberShipTypesServices.Get());
+                    return StatusCode(200, _memberShipTypesServices.Get());
                 }
             }
             return StatusCode(404);
@@ -44,7 +45,7 @@ namespace ProiectPractica5.Controllers
                 if (memberShipTypes != null)
                 {
                     _memberShipTypesServices.Post(memberShipTypes);
-                    return StatusCode(201, "MemberShipType was added in database");
+                    return StatusCode(201, Constants.CreateMemberShipTypesMessage);
                 }
             }
             catch (Exception ex)
@@ -63,14 +64,14 @@ namespace ProiectPractica5.Controllers
                 if (memberShipTypes != null)
                 {
                     _memberShipTypesServices.Put(memberShipTypes);
-                    return StatusCode(201, "MemberShipType was modify in database");
+                    return StatusCode(202, Constants.UpdateMemberShipTypesMessage);
                 }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
-            return StatusCode(500);
+            return StatusCode((int)HttpStatusCode.NotFound);
         }
 
         [HttpDelete]
@@ -81,7 +82,7 @@ namespace ProiectPractica5.Controllers
                 if (memberShipTypes != null)
                 {
                     _memberShipTypesServices.Delete(memberShipTypes);
-                    return StatusCode(201, "MemberShipType was delete in database");
+                    return StatusCode(200, Constants.DeleteMemberShipTypesMessage);
                 }
             }
             catch (Exception ex)

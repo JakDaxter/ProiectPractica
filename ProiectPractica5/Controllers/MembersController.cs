@@ -6,6 +6,7 @@ using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace ProiectPractica5.Controllers
 {
@@ -30,7 +31,7 @@ namespace ProiectPractica5.Controllers
             {
                 if (members.ToList().Count > 0) 
                 {
-                    return StatusCode(201, _membersServices.Get());
+                    return StatusCode(200, _membersServices.Get());
                 }
             }
             return StatusCode(404);
@@ -44,7 +45,7 @@ namespace ProiectPractica5.Controllers
                 if (members != null)
                 {
                     _membersServices.Post(members);
-                    return StatusCode(201, "Member was added in database");
+                    return StatusCode(201, Constants.CreateMembersMessage);
                 }
             }
             catch (Exception ex)
@@ -63,14 +64,14 @@ namespace ProiectPractica5.Controllers
                 if (members != null)
                 {
                     _membersServices.Put(members);
-                    return StatusCode(201, "Member was modify in database");
+                    return StatusCode(202, Constants.UpdateMembersMessage);
                 }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
-            return StatusCode(500);
+            return StatusCode((int)HttpStatusCode.NotFound);
         }
 
         [HttpDelete]
@@ -81,7 +82,7 @@ namespace ProiectPractica5.Controllers
                 if (members != null)
                 {
                     _membersServices.Delete(members);
-                    return StatusCode(201, "Member was delete in database");
+                    return StatusCode(200, Constants.DeleteMembersMessage);
                 }
             }
             catch (Exception ex)

@@ -6,6 +6,7 @@ using ProiectPractica5.Models;
 using ProiectPractica5.Services;
 using System;
 using System.Linq;
+using System.Net;
 
 namespace ProiectPractica5.Controllers
 {
@@ -30,7 +31,7 @@ namespace ProiectPractica5.Controllers
             {
                 if (codeSnippets.ToList().Count > 0) 
                 {
-                    return StatusCode(201, _announcementsServices.Get());
+                    return StatusCode(200, _announcementsServices.Get());
                 }
             }
             return StatusCode(404);
@@ -44,7 +45,7 @@ namespace ProiectPractica5.Controllers
                 if (announcements != null)
                 {
                     _announcementsServices.Post(announcements);
-                    return StatusCode(201, "Announcements was added in database");
+                    return StatusCode(201, Constants.CreateAnnouncementsMessage);
                 }
             }
             catch (Exception ex)
@@ -63,14 +64,14 @@ namespace ProiectPractica5.Controllers
                 if (announcements != null)
                 {
                     _announcementsServices.Put(announcements);
-                    return StatusCode(201, "Announcements was modify in database");
+                    return StatusCode(202, Constants.UpdateAnnouncementsMessage);
                 }
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
-            return StatusCode(500);
+            return StatusCode((int)HttpStatusCode.NotFound);
         }
 
         [HttpDelete]
@@ -81,7 +82,7 @@ namespace ProiectPractica5.Controllers
                 if (announcements != null)
                 {
                     _announcementsServices.Delete(announcements);
-                    return StatusCode(201, "Announcements was delete in database");
+                    return StatusCode(200, Constants.DeleteAnnouncementsMessage);
                 }
             }
             catch (Exception ex)
