@@ -2,6 +2,7 @@
 using ProiectPractica5.App_Data;
 using ProiectPractica5.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace ProiectPractica5.Services
 {
@@ -15,18 +16,18 @@ namespace ProiectPractica5.Services
         }
 
 
-        public void Delete(CodeSnippets codeShippets)
+        public async Task Delete(CodeSnippets codeShippets)
         {
             _context.Remove(codeShippets);
             _context.SaveChanges();
         }
 
-        public DbSet<CodeSnippets> Get()
+        public async Task<DbSet<CodeSnippets>> Get()
         {
             return _context.CodeShippets;
         }
 
-        public void Post(CodeSnippets codeShippets)
+        public async Task Post(CodeSnippets codeShippets)
         {
             var codeS = new CodeSnippets()
             {
@@ -41,7 +42,7 @@ namespace ProiectPractica5.Services
             _context.SaveChanges();
         }
 
-        public void Put(CodeSnippets codeShippets)
+        public async Task Put(CodeSnippets codeShippets)
         {
             _context.Update(codeShippets);
             _context.SaveChanges();

@@ -6,6 +6,7 @@ using ProiectPractica5.Services;
 using System;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace ProiectPractica5.Controllers
 {
@@ -23,27 +24,27 @@ namespace ProiectPractica5.Controllers
         }
         
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            DbSet<CodeSnippets> codeSnippets = _codeSnippetsServices.Get();
+            DbSet<CodeSnippets> codeSnippets = await _codeSnippetsServices.Get();
             if (codeSnippets != null)
             {
                 if (codeSnippets.ToList().Count > 0) 
                 {
-                    return StatusCode(200, _codeSnippetsServices.Get());
+                    return StatusCode(200,await _codeSnippetsServices.Get());
                 }
             }
             return StatusCode(404);
         }
         
         [HttpPost]
-        public IActionResult Post([FromBody] CodeSnippets codeShippets)
+        public async Task<IActionResult> Post([FromBody] CodeSnippets codeShippets)
         {
             try
             {
                 if(codeShippets != null)
                 {
-                    _codeSnippetsServices.Post(codeShippets);
+                    await _codeSnippetsServices.Post(codeShippets);
                     return StatusCode(201, Constants.CreateCodeSnippetMessage);
                 }
                 
@@ -57,13 +58,13 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] CodeSnippets codeShippets)
+        public async Task<IActionResult> Put([FromBody] CodeSnippets codeShippets)
         {
             try
             {
                 if (codeShippets != null)
                 {
-                    _codeSnippetsServices.Put(codeShippets);
+                    await _codeSnippetsServices.Put(codeShippets);
                     return StatusCode(202, Constants.UpdateCodeSnippetMessage);
                 }
             }
@@ -75,20 +76,17 @@ namespace ProiectPractica5.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromBody] CodeSnippets codeShippets)
+        public async Task<IActionResult> Delete([FromBody] CodeSnippets codeShippets)
         {
             try
             {
                 if (codeShippets != null)
                 {
-                    _codeSnippetsServices.Delete(codeShippets);
+                    await _codeSnippetsServices.Delete(codeShippets);
                     return StatusCode(200, Constants.DeleteCodeSnippetMessage);
                 }
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex);
-            }
+            catch (Exception ex) { return StatusCode(500, ex); }
             return StatusCode(500);
         }
     }

@@ -1,13 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProiectPractica5.Models;
+using System.Threading.Tasks;
+
 namespace ProiectPractica5.Services
 {
     public interface ICodeSnippetsServices
     {
-        public DbSet<CodeSnippets> Get();
-        public void Put(CodeSnippets codeShippets);
-        public void  Post(CodeSnippets codeShippets);
-        public void Delete(CodeSnippets codeShippets);
+        public Task<DbSet<CodeSnippets>> Get();
+        public Task Put(CodeSnippets codeShippets);
+        public Task  Post(CodeSnippets codeShippets);
+        public Task Delete(CodeSnippets codeShippets);
 
     }
 }

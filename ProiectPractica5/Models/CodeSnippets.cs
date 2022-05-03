@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ProiectPractica5.Models
@@ -13,5 +14,10 @@ namespace ProiectPractica5.Models
         public int Revision { get; set; }
         public bool IsPublished { get; set; }
         public DateTime DatetimeAdded { get; set; }
+
+        public static implicit operator DbSet<object>(CodeSnippets v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
